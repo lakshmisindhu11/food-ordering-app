@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="signup">
+        <h1 style="text-align: center;">Login</h1>
+        <form action="{{url_for('login_validate')}}" method="POST"> 
+            <label>Email</label>
+            <input type="text" name="email"/>
+            <label>Password</label>
+            <input type="password" name="password"/>
+            <input type="submit" value="SignIn">
+        </form>
+        <p class="or">
+            ----------or----------
+        </p>
+          <div class="icons">
+            <i class="fab fa-google"></i>
+            <i class="fab fa-facebook"></i>
+          </div>
+          <div class="links">
+            <p>Don't have account yet?</p>
+            <button onclick="window.location.href='{{ url_for('signup') }}'" id="signInButton">SignUp</button>
+          </div>
+        </div>
+</body>
+</html>

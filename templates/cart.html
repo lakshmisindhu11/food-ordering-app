@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" href="/static/css/Cart.css" />
+    <link rel="stylesheet" href="/static/css/Home.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <style>
+      .icon {
+        font-size: 30px; /* Adjust the size as needed */
+        color: red; /* Optional: Change the color */
+        cursor: pointer; /* Optional: Change cursor to pointer on hover */
+        margin-left: 5px;
+      }
+      .right {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="main-header">
+        <div class="logo">
+          <h1>
+            <a href="{{url_for('home')}}"><img src="/static/foodlogo.gif" /></a>
+          </h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="{{url_for('reservation')}}">Reservation</a></li>
+            <li><a href="#contact">Contact us</a></li>
+            <li><a href="#about">About us</a></li>
+            <li>
+              <a href="{{url_for('cart')}}" id="cart-icon"
+                ><img src="/static/shopping-cart.gif"
+              /></a>
+            </li>
+            <li class="profile-dropdown">
+              <img src="/static/user.jpg" />
+              <div class="dropdown-content">
+                <a href="{{ url_for('past_orders') }}" id="view-orders"
+                  >Orders</a
+                >
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="left">
+        <h1>Choose a delivery address</h1>
+        <p>Multiple addresses in this Dno</p>
+        <div id="addresses">
+          <!-- Address cards will be inserted here -->
+        </div>
+        <div class="address-card add-new" onclick="openPopup()">
+          <p class="icon">+</p>
+          <h3>Add New Address</h3>
+          <button class="btn">ADD NEW</button>
+        </div>
+        <div id="payment-options">
+          <label>
+            <input
+              type="radio"
+              name="payment"
+              id="payment"
+              value="cod"
+              required
+            />
+            Cash on Delivery
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="payment"
+              id="payment"
+              value="online"
+              required
+            />
+            Online Payment
+          </label>
+        </div>
+        <div class="proceed">
+          <!-- Example Proceed button in cart.html -->
+<button id="proceedBtn" class="btnn">Proceed</button>
+
+        </div>
+      </div>
+
+      <div class="cart-container">
+        <h2>Your Cart</h2>
+        <div class="cart-items">
+          {% for item in cart %}
+          <div class="cart-item" data-name="{{ item['name'] }}">
+            <div class="item-details">
+              <h3>{{ item['name'] }}</h3>
+            </div>
+            <div class="item-quantity">
+              <button onclick="updateQuantity('{{ item.name}}', -1)">
+                -
+              </button>
+              <input
+                type="number"
+                value="{{ item['quantity'] }}"
+                min="1"
+                readonly
+              />
+              <button onclick="updateQuantity('{{ item.name }}', 1)">
+                +
+              </button>
+            </div>
+            <div class="item-price">
+              <p>₹{{ item['price'] * item['quantity'] }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <p id="total-price"></p>
+      </div>
+    </div>
+    <div id="snackbar"></div>
+
+    <!-- Popup for adding new address -->
+    <div id="addressPopup" class="popup">
+      <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2>Add New Address</h2>
+        <form id="addressForm" action="{{url_for('address')}}" method="POST">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" required />
+          <label for="Dno">Dno</label>
+          <input type="text" id="dno" name="dno" required />
+          <label for="LandMark">LandMark</label>
+          <input type="text" id="landmark" name="landmark" required />
+          <button type="submit">Add Address</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+
+            function updateCart() {
+              fetch('/fetch_cart')
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          const cart = data.cart;
+                          renderCart(cart);
+                      } else {
+                          alert('Failed to load cart data');
+                      }
+                  });
+          }
+
+          function renderCart(cart) {
+            const cartItemsContainer = document.querySelector('.cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            cartItemsContainer.innerHTML = '';
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+                totalPriceElement.textContent = 'Total Price: ₹0.00';
+            } else {
+                cart.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    itemElement.setAttribute('data-name', item.name);
+                    itemElement.innerHTML = `
+                      <div class="item-details">
+                        <h3>${item.name}</h3>
+                      </div>
+                      <div class="item-quantity">
+                        <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                        <input type="number" value="${item.quantity}" min="1" readonly />
+                        <button onclick="updateQuantity('${item.name}', 1)">+</button>
+                      </div>
+                      <div class="item-price">
+                        <p>₹${(item.price * item.quantity).toFixed(2)}</p>
+                      </div>
+                      <span class="glyphicon glyphicon-trash icon" onclick="deleteCartItem('${item.name}')"></span>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                    totalPrice += item.price * item.quantity;  // Calculate total price
+                });
+                totalPriceElement.textContent = `Total Price: ₹${totalPrice.toFixed(2)}`;  // Display total price
+            }
+            updateCartCount();
+        }
+
+
+        function updateQuantity(name, change) {
+          const itemElement = document.querySelector(`.cart-item[data-name="${name}"]`);
+          const quantityInput = itemElement.querySelector('.item-quantity input');
+          let quantity = parseInt(quantityInput.value) + change;
+
+          // Ensure quantity is at least 1
+          if (quantity < 1) {
+              quantity = 1;
+          }
+
+          const priceElement = itemElement.querySelector('.item-price p');
+          const pricePerItem = parseFloat(priceElement.textContent.replace('₹', '')) / parseInt(quantityInput.value);
+
+          quantityInput.value = quantity;
+          priceElement.textContent = `₹${(pricePerItem * quantity).toFixed(2)}`;
+          const item = { name, quantity};
+
+          fetch('/update_cart_quantity', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(item)
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  document.getElementById('total-price').textContent = `Total Price: ₹${data.total_price.toFixed(2)}`;
+              } else {
+                  alert('Failed to update cart quantity: ' + data.message);
+              }
+          })
+          .catch(error => {
+              console.error('Error updating cart quantity:', error);
+              alert('An error occurred while updating the cart.');
+          });
+      }
+
+
+
+              document.addEventListener('DOMContentLoaded', () => {
+                  updateCart();
+              });
+
+
+
+
+              function deleteCartItem(name) {
+                  fetch('/remove_cart', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ name: name })  // Send the name of the item to remove
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          updateCart();  // Update the cart display after successful removal
+                          showSnackbar('Item removed from cart');
+                      } else {
+                          alert(data.message);  // Show error message if removal failed
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Error removing item:', error);
+                      alert('An error occurred while removing the item.');
+                  });
+              }
+
+              function clearCart() {
+                  fetch('/clear_cart', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify([])
+                  }).then(() => updateCart());
+              }
+
+              // Existing function to handle the Proceed button click
+function proceedToPayment() {
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+    if (!paymentMethod) {
+        alert('Please select a payment method.');
+        return;
+    }
+
+    // Make an AJAX POST request to the /process_payment route
+    fetch('/process_payment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ payment: paymentMethod }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+    showSnackbar('Payment processed and invoice sent');
+    // Redirect after 3 seconds
+    setTimeout(() => { window.location.href = '{{ url_for("home") }}' }, 3000);
+} else {
+    alert(data.message);
+}
+
+    })
+    .catch(error => {
+      showSnackbar('Payment processed and invoice sent');
+    // Redirect after 3 seconds
+    setTimeout(() => { window.location.href = '{{ url_for("home") }}' }, 3000);
+    });
+}
+
+// Attach the event listener to the Proceed button
+document.getElementById('proceedBtn').addEventListener('click', proceedToPayment);
+
+                  function showSnackbar(message) {
+                      const snackbar = document.getElementById('snackbar');
+                      snackbar.textContent = message;
+                      snackbar.className = 'show';
+
+                  }
+
+
+                  document.getElementById('cart-icon').addEventListener('click', () => {
+    window.location.href = '/cart';
+});
+
+              document.addEventListener('DOMContentLoaded', () => {
+                  const addressContainer = document.getElementById('addresses');
+                  addresses.forEach(addr => {
+                      const card = document.createElement('div');
+                      card.className = 'address-card';
+                      card.innerHTML = `
+                          <p>${addr.address}</p>
+                          <p>${addr.dno}</p>
+                          <p>${addr.landmark}</p>
+                          <button class="btn">DELIVER HERE</button>
+                      `;
+                      addressContainer.appendChild(card);
+                  });
+
+                  document.getElementById('addressForm').addEventListener('submit', function (e) {
+                      e.preventDefault();
+                      const address = document.getElementById('address').value;
+                      const dno = document.getElementById('dno').value;
+                      const landmark = document.getElementById('landmark').value;
+                      addresses.push({ id: addresses.length + 1, name: "New Address", address, dno, landmark });
+                      closePopup();
+                      window.Dno.reload();
+                  });
+              });
+
+              function openPopup() {
+                  document.getElementById('addressPopup').style.display = 'flex';
+              }
+
+              function closePopup() {
+                  document.getElementById('addressPopup').style.display = 'none';
+              }
+
+              document.addEventListener("DOMContentLoaded", () => {
+                  fetch('/fetch_addresses')
+                      .then(response => response.json())
+                      .then(data => {
+                          if (data.success) {
+                              const addresses = data.addresses;
+                              const addressContainer = document.getElementById("addresses");
+                              addresses.forEach(addr => {
+                                  const card = document.createElement("div");
+                                  card.className = "address-card";
+                                  card.innerHTML = `
+                                      <p id="ad">${addr.address}</p>
+                                      <p id="dn">${addr.dno}</p>
+                                      <p id="ld">${addr.landmark}</p>
+                                      <button class="btn" onclick="sadd('${addr.address},${addr.dno},${addr.landmark}')">DELIVER HERE</button>
+                                  `;
+                                  addressContainer.appendChild(card);
+                              });
+                          } else {
+                              alert('Failed to load addresses');
+                          }
+                      });
+              });
+
+
+              function sadd(address,dno,landmark){
+                fetch('/save_address', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ address:address,dno:dno,landmark:landmark })  // Send the name of the item to remove
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (!data.success) {
+                          alert(data.message);  // Show error message if removal failed
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Error removing item:', error);
+                      alert('An error occurred while removing the item.');
+                  });
+              }
+    </script>
+  </body>
+</html>

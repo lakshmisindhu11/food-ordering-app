@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/static/css/Admin.css" />
+  </head>
+  <body>
+    <nav>
+      <ul class="nav_menu">
+        <li><a href="{{ url_for('show_menu') }}">Menu</a></li>
+        <li><a href="{{ url_for('admin') }}">Add Menu Item</a></li>
+        <li><a href="{{ url_for('users') }}">Users</a></li>
+        <li><a href="{{ url_for('delete_item') }}">Delete Menu Item</a></li>
+      </ul>
+    </nav>
+    <hr />
+    <!-- Rest of the admin.html content -->
+    <form class="custom-form" onsubmit="deleteMenuItem(event)">
+      <h2>Delete Items</h2>
+      <div class="form-group">
+        <label for="Category">Category</label>
+        <input
+          type="text"
+          id="Category"
+          name="category"
+          placeholder="Enter your Category"
+        />
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+        />
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Delete Item" />
+      </div>
+    </form>
+  </body>
+  <script>
+    async function deleteMenuItem(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const name = document.getElementById("name").value;
+
+      try {
+        const response = await fetch("/delete_menu_item", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: name }),
+        });
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(result.message); // Show success message from backend
+        } else {
+          alert(result.message); // Show error message from backend
+        }
+      } catch (error) {
+        alert("An error occurred: " + error.message);
+      }
+    }
+  </script>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu</title>
+    <link rel="stylesheet" href="/static/css/Menu.css" />
+    <link rel="stylesheet" href="/static/css/Home.css" />
+  </head>
+  <body>
+    <header>
+      <div class="main-header">
+        <div class="logo">
+          <h1>
+            <a href="{{url_for('home')}}"><img src="/static/foodlogo.gif" /></a>
+          </h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="{{url_for('reservation')}}">Reservation</a></li>
+            <li><a href="#contact">Contact us</a></li>
+            <li><a href="#about">About us</a></li>
+            <li>
+              <a href="{{url_for('cart')}}" id="cart-icon"
+                ><img src="/static/shopping-cart.gif"
+              /></a>
+            </li>
+            <li class="profile-dropdown">
+              <img src="/static/user.jpg" />
+              <div class="dropdown-content">
+                <a href="{{ url_for('past_orders') }}" id="view-orders"
+                  >Orders</a
+                >
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <style>
+      .menu-item .add-bt {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #ff5100;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+    </style>
+    <main>
+      <h2 style="font-size: 50px; margin-top: -2px">Our Popular Menu</h2>
+      <div class="categories">
+        <button data-filter="all">All categories</button>
+        <button data-filter="breakfast">Breakfast</button>
+        <button data-filter="lunch">Lunch</button>
+        <button data-filter="dinner">Dinner</button>
+        <button data-filter="dessert">Dessert</button>
+        <button data-filter="drink">Drink</button>
+      </div>
+      <div class="menu-items">
+        {% for item in menu %}
+        <div
+          class="menu-item"
+          data-category="{{ item['category'] }}"
+          data-name="{{ item['name'] }}"
+          data-price="{{ item['price'] }}"
+          data-description="{{ item['description'] }}"
+          data-image="{{ item['image'] }}"
+        >
+          <img
+            src="{{ url_for('static', filename=item['image']) }}"
+            alt="{{ item['name'] }}"
+            onclick="showDetails(this)"
+          />
+          <h3>{{ item['name'] }}</h3>
+          <p>price ₹{{ item['price'] }}</p>
+          <button
+            class="add-bt"
+            onclick="addToCartDirectly('{{ item.name }}', '{{ item.price }}', '{{ item.image }}')"
+          >
+            Add to Cart
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const buttons = document.querySelectorAll('.categories button');
+          const items = document.querySelectorAll('.menu-item');
+          const searchBar = document.getElementById('search-bar');
+
+          buttons.forEach(button => {
+              button.addEventListener('click', () => {
+                  const filter = button.getAttribute('data-filter');
+                  items.forEach(item => {
+                      if (filter === 'all') {
+                          item.style.display = 'block';
+                      } else {
+                          item.style.display = item.getAttribute('data-category') === filter ? 'block' : 'none';
+                      }
+                  });
+              });
+          });
+
+          if (searchBar) {
+              searchBar.addEventListener('input', () => {
+                  const searchTerm = searchBar.value.toLowerCase();
+                  items.forEach(item => {
+                      const itemName = item.getAttribute('data-name').toLowerCase();
+                      item.style.display = itemName.includes(searchTerm) ? 'block' : 'none';
+                  });
+              });
+          }
+
+          updateCartCount();
+      });
+
+      function showDetails(element) {
+          const item = element.closest('.menu-item');
+          const name = item.getAttribute('data-name');
+          const price = item.getAttribute('data-price');
+          const description = item.getAttribute('data-description');
+          const image = item.getAttribute('data-image');
+
+          document.getElementById('modal-image').src = `{{ url_for('static', filename='') }}${image}`;
+          document.getElementById('modal-title').textContent = name;
+          document.getElementById('modal-description').textContent = description;
+          document.getElementById('modal-price').textContent = `price ₹${price}`;
+          document.getElementById('quantity').value = 1;
+
+          document.getElementById('item-modal').style.display = 'block';
+      }
+
+      function closeModal() {
+          document.getElementById('item-modal').style.display = 'none';
+      }
+
+      function addToCartDirectly(name, price, image) {
+          const item = { name, quantity: 1, price, image };
+          fetch('/add_to_cart', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(item)
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  updateCartCount();
+              } else {
+                  console.error(data.message);
+              }
+          })
+          .catch(error => console.error('Error:', error));
+      }
+
+      function updateCartCount() {
+          fetch('/fetch_cart')
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      document.getElementById('cart-count').textContent = data.cart.length;
+                  }
+              });
+      }
+
+      document.getElementById('cart-icon').addEventListener('click', () => {
+        window.location.href = '/cart';
+      });
+    </script>
+  </body>
+</html>

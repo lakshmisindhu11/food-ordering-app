@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation</title>
+    <link rel="stylesheet" href="/static/css/confirm_Reservation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="reservation-container">
+        <div class="reservation-header">
+            <h1>Reservation</h1>
+            <p>Due to limited availability, we can hold this table for you for <strong>5:00 minutes</strong></p>
+            <a href="templates/Reservation.html" class="close-icon"><i class="fas fa-times"></i></a>
+        </div>
+        <div class="form-section">
+            <div class="data-order">
+                <h2>Data order</h2>
+                <form>
+                    <input type="text" name="first_name" placeholder="First name" required>
+                    <input type="text" name="last_name" placeholder="Last name" required>
+                    <input type="tel" name="phone_number" placeholder="Phone number" required>
+                    <input type="email" name="email_address" placeholder="Email address" required>
+                    <textarea name="special_request" placeholder="Add a special request"></textarea>
+                    <a href="/templates/Reservation.html" class="confirm-button"><input type="button" value="Confirm Reservation"/></a>
+                </form>
+            </div>
+            <div class="reservation-detail">
+                <h2>Reservation detail</h2>
+                <p id="selectedDate"><i class="fas fa-calendar"></i></p>
+                <p id="selectedTime"><i class="fas fa-clock"></i></p>
+                <p id="selectedPeople"><i class="fas fa-user"></i></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const date = getUrlParameter('date');
+            const time = getUrlParameter('time');
+            const people = getUrlParameter('people');
+
+            if (date) {
+                document.getElementById('selectedDate').textContent = `${date}`;
+            }
+            if (time) {
+                document.getElementById('selectedTime').textContent = `${time}`;
+            }
+            if (people) {
+                document.getElementById('selectedPeople').textContent = `${people}`;
+            }
+        });
+    </script>
+</body>
+</html>

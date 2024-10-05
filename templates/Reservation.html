@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservation Page</title>
+    <link rel="stylesheet" href="/static/css/Reservation.css" />
+    <script src="/static/js/header.js"></script>
+    <link rel="stylesheet" href="/static/css/Home.css" />
+    <style>
+      #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+      }
+
+      #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+
+      @-webkit-keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          bottom: 30px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="main-header">
+        <div class="logo">
+          <h1>
+            <a href="{{url_for('home')}}"><img src="/static/foodlogo.gif" /></a>
+          </h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="{{url_for('reservation')}}">Reservation</a></li>
+            <li><a href="#contact">Contact us</a></li>
+            <li><a href="#about">About us</a></li>
+            <li>
+              <a href="{{url_for('cart')}}" id="cart-icon"
+                ><img src="/static/shopping-cart.gif"
+              /></a>
+            </li>
+            <li class="profile-dropdown">
+              <img src="/static/user.jpg" />
+              <div class="dropdown-content">
+                <a href="{{ url_for('past_orders') }}" id="view-orders"
+                  >Orders</a
+                >
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="Reservation">
+      <div class="table-img">
+        <img src="/static/table.png" alt="table-img" />
+      </div>
+      <div class="book-table">
+        <h1 style="text-align: center; font-size: 70px; margin-top: 20px">
+          Book a table
+        </h1>
+        <form id="form">
+          <select id="dateDropdown" name="date" required></select>
+          <br /><br />
+
+          <select id="timeDropdown" name="time" required>
+            <option value="12 PM to 1 PM">12 PM to 1 PM</option>
+            <option value="1 PM to 2 PM">1 PM to 2 PM</option>
+            <option value="2 PM to 3 PM">2 PM to 3 PM</option>
+            <option value="7 PM to 8 PM">7 PM to 8 PM</option>
+            <option value="8 PM to 9 PM">8 PM to 9 PM</option>
+            <option value="9 PM to 10 PM">9 PM to 10 PM</option>
+          </select>
+          <br /><br />
+
+          <input
+            type="text"
+            id="npeople"
+            name="people"
+            placeholder="Number of people"
+            required
+          />
+          <br /><br />
+
+          <button type="submit" onclick="submitForm(event)">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="snackbar">Reservation Successful</div>
+
+    <script>
+      function showSnackbar(message) {
+        const snackbar = document.getElementById("snackbar");
+        snackbar.textContent = message;
+        snackbar.className = "show";
+        setTimeout(() => {
+          snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+      }
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const dateDropdown = document.getElementById("dateDropdown");
+        const today = new Date();
+        const daysOfWeek = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        for (let i = 0; i < 7; i++) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + i);
+          const dayName = daysOfWeek[date.getDay()];
+          const day = date.getDate();
+          const month = months[date.getMonth()];
+          const year = date.getFullYear();
+          const formattedDate = `${dayName}, ${day} ${month} ${year}`;
+          const option = document.createElement("option");
+          option.value = formattedDate;
+          option.textContent = formattedDate;
+          dateDropdown.appendChild(option);
+        }
+      });
+
+      function submitForm(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = document.getElementById("form");
+        const formData = new FormData(form);
+
+        // Perform validation checks
+        const date = formData.get("date");
+        const time = formData.get("time");
+        const people = formData.get("people");
+
+        if (!date || !time || !people) {
+          showSnackbar("All fields are required.");
+          return;
+        }
+
+        fetch("/confirm_reser", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              showSnackbar("Reservation Successful");
+            } else {
+              showSnackbar(data.message || "Reservation Failed");
+            }
+          })
+          .catch(() => {
+            showSnackbar("An error occurred");
+          });
+      }
+    </script>
+  </body>
+</html>

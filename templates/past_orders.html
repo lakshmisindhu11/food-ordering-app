@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Past Orders</title>
+    <link rel="stylesheet" href="/static/css/orders.css" />
+    <link rel="stylesheet" href="/static/css/Home.css" />
+  </head>
+  <body>
+    <div class="profile-header">
+      <div class="profile-info">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+      </div>
+      <button class="edit-profile">Edit Profile</button>
+    </div>
+
+    <div class="container">
+      <h3>Past Orders</h3>
+      <div class="past-orders-section">
+        {% for order in past_orders %}
+        <div class="order-card">
+          <div class="order-details">
+            <img
+              src="{{ url_for('static', filename=order['image']) }}"
+              alt="{{ order['name'] }}"
+              class="order-image"
+            />
+            <div class="order-info">
+              {% if order['address'] %}
+                <p>Address: 
+                  {% if order['address']['dno'] %}{{ order['address']['dno'] }}{% endif %}
+                  {% if order['address']['landmark'] %}{% if order['address']['dno'] %}, {% endif %}{{ order['address']['landmark'] }}{% endif %}
+                  {% if order['address']['address'] %}{% if order['address']['landmark'] or order['address']['dno'] %}, {% endif %}{{ order['address']['address'] }}{% endif %}
+                </p>
+              {% else %}
+                <p>Address: N/A</p>
+              {% endif %}
+              <p class="delivery-date" style="color:#28a745;">
+                ORDERED ON {{ order['Time and Date'] }}
+              </p>
+              {% for item in order['items'] %}
+              <p class="card-text">
+                {{ item['name'] }} x{{ item['quantity'] }}
+              </p>
+              {% endfor %}
+              <p>Total Paid: ₹{{ order['total_price'] }}</p>
+            </div>
+          </div>
+          <div class="order-actions">
+            <button class="reorder">REORDER</button>
+            <button class="help">HELP</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

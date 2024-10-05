@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User List</title>
+    <link rel="stylesheet" href="/static/css/addTocart.css" />
+  </head>
+  <body>
+    <nav>
+      <ul class="nav_menu">
+        <li><a href="{{ url_for('show_menu') }}">Menu</a></li>
+        <li><a href="{{ url_for('admin') }}">Add Menu Item</a></li>
+        <li><a href="{{ url_for('users') }}">Users</a></li>
+        <li><a href="{{ url_for('delete_item') }}">Delete Menu Item</a></li>
+      </ul>
+    </nav>
+    <hr />
+    <h1>User List</h1>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user['name'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>
+              <a href="/user/{{ user['email'] }}" class="view-details-btn"
+                >VIEW DETAILS</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

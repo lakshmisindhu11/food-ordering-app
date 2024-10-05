@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <div class="main">
+     <div class="signup">
+        <h1 style="text-align: center;">Sign Up</h1>
+        <form action="{{url_for('signup_validate')}}" method="POST" >
+            <label for="name">Name</label>
+            <input type="text" name="name" required/>
+            <label for="name">UserName</label>
+            <input type="text" name="username" required/>
+            <label for="name">Email</label>
+            <input type="text" name="email" required/>
+            <label for="name">Password</label>
+            <input type="password" name="password"required/>
+            <label for="name">Confirm Password</label>
+            <input type="password" name="cpass"required/>
+            <input type="submit" value="SignUp"/>
+
+        </form>
+     </div>
+    </div>
+</body>
+
+</html>

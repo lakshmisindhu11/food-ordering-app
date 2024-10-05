@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+    <link rel="stylesheet" href="/static/css/user_details.css" />
+  </head>
+  <body>
+    <nav>
+      <ul class="nav_menu">
+        <li><a href="{{ url_for('show_menu') }}">Menu</a></li>
+        <li><a href="{{ url_for('admin') }}">Add Menu Item</a></li>
+        <li><a href="{{ url_for('users') }}">Users</a></li>
+        <li><a href="{{ url_for('delete_item') }}">Delete Menu Item</a></li>
+      </ul>
+    </nav>
+
+    <h1>User Details</h1>
+    {% if user %}
+    <ul>
+      <li><strong>Name:</strong> {{ user['name'] }}</li>
+      <li><strong>Username:</strong> {{ user['username'] }}</li>
+      <li><strong>Email:</strong> {{ user['email'] }}</li>
+    </ul>
+
+    <h2>Addresses</h2>
+    {% if user['global_address'] %}
+    <ul>
+      {% for address in user['global_address'] %}
+      <li>
+        Dno: {{ address['dno'] }}, Landmark: {{ address['landmark'] }}, Address:
+        {{ address['address'] }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No addresses found.</p>
+    {% endif %}
+
+    <h2>Reservations</h2>
+    {% if user['reservation'] %}
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>No of People</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reservation in user['reservation'] %}
+        <tr>
+          <td>{{ reservation['date'] }}</td>
+          <td>{{ reservation['time'] }}</td>
+          <td>{{ reservation['No of people'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No reservations found.</p>
+    {% endif %}
+
+    <h2>Order Details</h2>
+    {% for cart_group in cart_groups %}
+    <h3>
+      Ordered on {{ cart_group['time_and_date'] }} (Payment Method: {{
+      cart_group['payment_method'] }})
+    </h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_group['items'] %}
+        <tr>
+          <td>{{ item['name'] }}</td>
+          <td>{{ item['quantity'] }}</td>
+          <td>{{ item['price'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2"><strong>Total Price:</strong></td>
+          <td><strong>{{ cart_group['total_price'] }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+    {% endfor %} {% else %}
+    <p>User not found.</p>
+    {% endif %}
+  </body>
+</html>

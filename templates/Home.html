@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/Home.css" />
+    <script src="/static/js/header.js"></script>
+
+    <!-- stars style start -->
+
+    <style>
+      .star {
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black;
+      }
+      .star.gold {
+        color: gold;
+      }
+
+      .feedback-card {
+        /*border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 250px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        justify-items: center;
+         border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color:#f9f9f9
+            margin-right: 10px;
+            min-width: 250px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        display: inline-block;
+        vertical-align: top;*/
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        margin-right: 10px;
+        min-width: 250px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        vertical-align: top;
+        word-wrap: break-word; /* Ensure long words break to the next line */
+        overflow-wrap: break-word; /* Ensure long words break to the next line */
+        max-width: 250px; /* Optional: set a max-width for the card */
+      }
+      .star-rating {
+        font-size: 24px;
+      }
+      .slider-container {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .feedback-container {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+      .feedback-container::-webkit-scrollbar {
+        display: none;
+      }
+      .slider-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 10;
+        font-size: 24px;
+      }
+      .slider-button.left {
+        left: 10px;
+      }
+      .slider-button.right {
+        right: 10px;
+      }
+
+      .jim {
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+    <!-- stars style end -->
+  </head>
+  <body>
+    <header>
+      <div class="main-header">
+        <div class="logo">
+          <h1>
+            <a href="{{url_for('home')}}"><img src="/static/foodlogo.gif" /></a>
+          </h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="{{url_for('reservation')}}">Reservation</a></li>
+            <li><a href="#contact">Contact us</a></li>
+            <li><a href="#about">About us</a></li>
+            <li>
+              <a href="{{url_for('cart')}}" id="cart-icon"
+                ><img src="/static/shopping-cart.gif"
+              /></a>
+            </li>
+            <li class="profile-dropdown">
+              <img src="/static/user.jpg" />
+              <div class="dropdown-content">
+                <a href="{{ url_for('past_orders') }}" id="view-orders"
+                  >Orders</a
+                >
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 style="text-align: center">User Profile</h2>
+        <form
+          id="updateProfileForm"
+          method="POST"
+          enctype="multipart/form-data"
+          action="{{ url_for('update_profile') }}"
+        >
+          <div>
+            <img
+              id="profilePhoto"
+              src="{{ url_for('static', filename='profile_photos/' ~ user.profile_photo) }}"
+              alt="Profile Photo"
+              style="width: 150px; height: 150px; border-radius: 50%"
+              onclick="document.getElementById('profilePhotoInput').click();"
+            />
+            <input
+              type="file"
+              id="profilePhotoInput"
+              name="profile_photo"
+              style="display: none"
+              onchange="document.getElementById('updateProfileForm').submit();"
+            />
+          </div>
+          <div>
+            <label for="username"><b>UserName:</b></label>
+            <span id="username">{{ user.username }}</span>
+          </div>
+          <div>
+            <label for="email"><b>EmailID:</b></label>
+            <span id="email">{{ user.email }}</span>
+          </div>
+          <div>
+            <input type="submit" value="UpdateProfile" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <section id="first_section" class="first_section">
+      <div class="hs1">
+        <div class="hs10">
+          <div class="hs11">
+            <p>Discover a unique experience.</p>
+          </div>
+          <div class="hs12">
+            <p>
+              We provide best food in town, we provide home <br />delivery and
+              dine in services.
+            </p>
+          </div>
+          <div class="hs13">
+            <a href="{{url_for('show_menu')}}"
+              ><input type="button" value="Order now"
+            /></a>
+            <a href="{{url_for('reservation')}}"
+              ><input type="button" value="Reservation"
+            /></a>
+          </div>
+        </div>
+        <div class="home-img">
+          <img src="/static/resta.jpg" />
+        </div>
+      </div>
+    </section>
+
+    <section id="second_section" class="second_section">
+      <div class="hs2">
+        <div class="home-img">
+          <img src="/static/main2.png" />
+        </div>
+        <div class="hs20">
+          <div class="hs21">
+            <p>
+              Our Most <br />Popular <br />
+              Dish.
+            </p>
+          </div>
+          <div class="hs22">
+            <p>
+              This dish is full of flavor and nutrition! <br />Quinoa is a
+              complete protein, providing all <br />the essential amino acids
+              your body needs, <br />and is also a good source of fiber.
+            </p>
+          </div>
+          <div class="hs23">
+            <a href="{{url_for('show_menu')}}"
+              ><input type="button" value="Order now"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="hs4">
+        <div class="hs41">
+          <h2 style="font-size: xxx-large">Hungry? We are open now...</h2>
+        </div>
+        <div class="hs42">
+          <a href="{{url_for('show_menu')}}"
+            ><input type="button" value="Order now"
+          /></a>
+          <a href="{{url_for('reservation')}}"
+            ><input type="button" value="Reservation"
+          /></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container">
+        <h2 style="font-size: xxx-large">Our Journey and Inspiration</h2>
+        <div class="content">
+          <p style="font-size: x-large">
+            At Foodie, we are dedicated to creating unique culinary experiences
+            that<br />set us apart. Our journey is fueled by passion,
+            innovation, and a love for food.
+          </p>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <h3 style="font-size: x-large">Our Roots</h3>
+            <p style="font-size: large">
+              Inspired by a love for fresh, local ingredients, Foodie was born
+              out of a desire to bring unique flavors to our community.
+            </p>
+          </div>
+          <div class="column">
+            <h3 style="font-size: x-large">Our Passion</h3>
+            <p style="font-size: large">
+              Every dish we create is a labor of love, crafted with care and
+              attention to detail to provide an unforgettable dining experience.
+            </p>
+          </div>
+          <div class="column">
+            <h3 style="font-size: x-large">Our Uniqueness</h3>
+            <p style="font-size: large">
+              We pride ourselves on offering innovative dishes that you won't
+              find anywhere else, making each visit to Foodie a new adventure.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br><br><br>
+    <div class="slider-container">
+      <button class="slider-button left" onclick="scrollLeft()">&#9664;</button>
+      <div id="feedbackContainer" class="feedback-container"></div>
+      <button class="slider-button right" onclick="scrollRight()">
+        &#9654;
+      </button>
+    </div>
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="logo">
+          <h1>
+            <a href="{{url_for('home')}}"><img src="/static/foodlogo.gif" /></a>
+          </h1>
+        </div>
+
+        <div class="column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="column">
+          <h3>Explore</h3>
+          <ul>
+            <li><a href="{{url_for('show_menu')}}">Menu</a></li>
+            <li><a href="#about">About Us</a></li>
+          </ul>
+        </div>
+        <div class="column">
+          <h3>Contact</h3>
+          <ul>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+
+        <div class="column">
+          <h3>Feedback</h3>
+          <form id="ratingForm">
+            <label for="rating">Rating:</label><br />
+            <input
+              type="number"
+              id="ratingInput"
+              name="rating"
+              required
+              min="1"
+              max="5"
+            /><br /><br />
+            <label for="message">Message:</label><br />
+            <textarea
+              id="messageInput"
+              name="message"
+              placeholder="Enter your message"
+              required
+            ></textarea
+            ><br /><br />
+            <input type="button" value="Submit" onclick="submitFeedback()" />
+          </form>
+        </div>
+      </div
+      <div class="bottom-bar">
+        <div>
+          &copy; 2024 Foodie. All rights reserved by Nithin & Leela Deepak. |
+          Terms of Service |
+          Privacy Policy
+        </div>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <script>
+    async function submitFeedback() {
+      const rating = document.getElementById("ratingInput").value;
+      const message = document.getElementById("messageInput").value;
+
+      const response = await fetch("/submit_feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rating, message }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        updateFeedback(); // Update the feedback display
+        window.location.reload();
+      } else {
+        alert("Failed to submit feedback: " + result.message);
+      }
+    }
+
+    async function updateFeedback() {
+      const response = await fetch("/get_feedback");
+      const data = await response.json();
+      const container = document.getElementById("feedbackContainer");
+      container.innerHTML = "";
+
+      data.forEach((feedback) => {
+        const card = document.createElement("div");
+        card.classList.add("feedback-card");
+        card.innerHTML = `
+                    <h2>Feedback</h2>
+                    <div class="jim">
+                    <div style="margin-top:8px;"><strong>${
+                      feedback.name
+                    }</strong></div>
+                    <div class="star-rating">
+                        ${getStars(feedback.rating)}
+                    </div>
+                    </div>
+                    <p>${feedback.message}</p>
+                    
+                `;
+        container.appendChild(card);
+      });
+    }
+
+    function getStars(rating) {
+      const maxStars = 5;
+      let starsHtml = "";
+      for (let i = 1; i <= maxStars; i++) {
+        starsHtml +=
+          i <= rating
+            ? '<span class="star gold">★</span>'
+            : '<span class="star">★</span>';
+      }
+      return starsHtml;
+    }
+
+    function scrollLeft() {
+      const container = document.getElementById("feedbackContainer");
+      const scrollAmount = container.offsetWidth / 2;
+      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    }
+
+    function scrollRight() {
+      const container = document.getElementById("feedbackContainer");
+      const scrollAmount = container.offsetWidth / 2;
+      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+
+    // Display stored feedback on page load
+    document.addEventListener("DOMContentLoaded", updateFeedback);
+  </script>
+</html>

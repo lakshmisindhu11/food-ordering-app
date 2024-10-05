@@ -1,0 +1,191 @@
+[
+    {
+        "category": "breakfast",
+        "name": "Ghee-Dosa",
+        "price": 70,
+        "description": "It is famous south Indian breakfast",
+        "image": "ghee-dosa.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Chicken-Biriyani",
+        "price": 250,
+        "description": "It is famous south Indian breakfast",
+        "image": "chicken_biryani.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Sushi wit Rice",
+        "price": 150,
+        "description": "It is famous south Indian breakfast",
+        "image": "bowl_sushi.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Panner",
+        "price": 90,
+        "description": "It is famous south Indian breakfast",
+        "image": "paneer.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Chiken Noodles",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "chicken_noodles.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Pasta",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "pasta.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Korean Chicken",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "korean_chicken.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Fish Curry",
+        "price": 90,
+        "description": "It is famous south Indian breakfast",
+        "image": "fish.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Veg Noddles",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "veg_noddles.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Veg Soup",
+        "price": 70,
+        "description": "It is famous south Indian breakfast",
+        "image": "veg_soup.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Pumpkin Soup",
+        "price": 70,
+        "description": "It is famous south Indian breakfast",
+        "image": "pumpkin_soup.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Coconut Soup",
+        "price": 70,
+        "description": "It is famous south Indian breakfast",
+        "image": "coconut_soup.png"
+    },
+    {
+        "category": "breakfast",
+        "name": "Salad",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "salad.png"
+    },
+    {
+        "category": "drink",
+        "name": "Virgin Mojito",
+        "price": 150,
+        "description": "It is famous south Indian breakfast",
+        "image": "Virgin Mojito.jpg"
+    },
+    {
+        "category": "breakfast",
+        "name": "Allu Samosa",
+        "price": 50,
+        "description": "It is famous south Indian breakfast",
+        "image": "allu_samosa.png"
+    },
+    {
+        "category": "drink",
+        "name": "Watermelon Mint Cocktail",
+        "price": 130,
+        "description": "It is famous south Indian breakfast",
+        "image": "water.jpg"
+    },
+    {
+        "category": "Dinner",
+        "name": "Pulka",
+        "price": 10,
+        "description": "It is famous south Indian breakfast",
+        "image": "pulka.png"
+    },
+    {
+        "category": "drink",
+        "name": "Tropical Punch Mocktail",
+        "price": 150,
+        "description": "It is famous south Indian breakfast",
+        "image": "Tropical Punch Mocktail.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Nan",
+        "price": 40,
+        "description": "It is famous south Indian breakfast",
+        "image": "nan.png"
+    },
+    {
+        "category": "drink",
+        "name": "Oreo Thick Shake",
+        "price": 180,
+        "description": "It is famous south Indian breakfast",
+        "image": "thick shake.jpg"
+    },
+    {
+        "category": "Dinner",
+        "name": "Allu Parota",
+        "price": 80,
+        "description": "It is famous south Indian breakfast",
+        "image": "allu_parota.png"
+    },
+    {
+        "category": "Dinner",
+        "name": "Parota",
+        "price": 60,
+        "description": "It is famous south Indian breakfast",
+        "image": "parota.png"
+    },
+    {
+        "category": "drink",
+        "name": "Mint Mojito",
+        "price": 140,
+        "description": "It is famous south Indian breakfast",
+        "image": "Mint Mojito.jpg"
+    },
+    {
+        "category": "drink",
+        "name": "Blue Ocean Mojito",
+        "price": 160,
+        "description": "It is famous south Indian breakfast",
+        "image": "Blue Ocean Mojito.jpg"
+    },
+    {
+        "category": "Dinner",
+        "name": "Shrimp Shot",
+        "price": 100,
+        "description": "It is famous south Indian breakfast",
+        "image": "shrimp_shot.png"
+    },
+    {
+        "category": "lunch",
+        "name": "Bean Buddy Cash",
+        "price": 140,
+        "description": "It is famous south Indian breakfast",
+        "image": "bean_buddy.png"
+    },
+    {
+        "category": "breakfast",
+        "name": "Avacado Brown Bread",
+        "price": 110,
+        "description": "It is famous south Indian breakfast",
+        "image": "avacado_bread.png"
+    }
+]

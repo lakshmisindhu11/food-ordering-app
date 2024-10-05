@@ -1,0 +1,75 @@
+{
+    "users": {
+        "nithindevanaboina0304@gmail.com": {
+            "name": "nithin",
+            "username": "nithin_403",
+            "email": "nithindevanaboina0304@gmail.com",
+            "password": "nithin",
+            "address": {
+                "address": "df",
+                "dno": "ff",
+                "landmark": "dff"
+            },
+            "date": {
+                "date": "Wednesday, 19 June 2024",
+                "time": "12 PM to 1 PM",
+                "No of people": "2"
+            },
+            "reservation": {
+                "date": "Monday, 1 July 2024",
+                "time": "7 PM to 8 PM",
+                "No of people": "25"
+            },
+            "cart": []
+        },
+        "leela@gmail.com": {
+            "name": "leela",
+            "username": "leela_1",
+            "email": "leela@gmail.com",
+            "password": "leela",
+            "address": {
+                "address": "leela",
+                "dno": "1425",
+                "landmark": "backsude"
+            },
+            "date": {
+                "date": "Sunday, 16 June 2024",
+                "time": "12 PM to 1 PM",
+                "No of people": "45"
+            },
+            "reservation": {
+                "date": "Wednesday, 26 June 2024",
+                "time": "12 PM to 1 PM",
+                "No of people": "25"
+            }
+        },
+        "r@gmail.com": {
+            "name": "r",
+            "username": "r123",
+            "email": "r@gmail.com",
+            "password": "r",
+            "cart": [
+                {
+                    "name": "Panner",
+                    "quantity": 1,
+                    "price": 100
+                },
+                {
+                    "name": "Chiken Noodles",
+                    "quantity": 1,
+                    "price": 100
+                },
+                {
+                    "name": "Pasta",
+                    "quantity": 1,
+                    "price": 100
+                }
+            ],
+            "address": {
+                "address": "MadhuroNagar",
+                "dno": "ccx",
+                "landmark": "ggd"
+            }
+        }
+    }
+}
